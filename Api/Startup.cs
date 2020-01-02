@@ -32,7 +32,13 @@ namespace Api
                 opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             }
             );
-
+            services.AddCors( opt =>
+            {
+                opt.AddPolicy("CarsPolicy", policy =>
+                {
+                    policy.AllowAnyMethod().AllowAnyMethod().WithOrigins("http://localhost:3000");
+                });
+            });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -50,6 +56,7 @@ namespace Api
             }
 
             //app.UseHttpsRedirection();
+            app.UseCors("CarsPolicy");
             app.UseMvc();
         }
     }
